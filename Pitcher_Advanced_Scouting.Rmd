@@ -1,0 +1,191 @@
+---
+output:
+  pdf_document: 
+    keep_tex: false
+geometry: margin= 0.05 in
+ 
+header-includes:
+ 
+  \usepackage{booktabs}
+  \usepackage{colortbl}
+  \usepackage{subfig}
+  \usepackage{floatrow}
+  \usepackage{sectsty}
+  \usepackage{titlesec}
+ 
+
+---
+```{r setup, include=FALSE}
+#
+library(webshot)
+library(tidyverse)
+library(kableExtra)
+library(gridExtra)
+library(gtsummary)
+library(pak)
+library(kableExtra)
+library(knitr)
+library(flextable)
+library(pandoc)
+library(ggplot2)
+library(tinytex)
+
+
+opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.pos = '!h')
+```
+
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+\begin{center}
+\textbf{\LARGE `r params$pitcher`}
+\end{center}
+
+\vspace{-7mm} 
+\begin{center}
+\textbf{\normalsize Pitch Characteristics}
+\end{center}
+\vspace{-5mm} 
+```{r pitch characteristics ,warning=FALSE,echo=FALSE}
+
+# we again scale the colors manually to match the plots
+game_summary_table %>%
+  kable(format = "latex",  linesep = "", label = "Game Summary") %>%
+  kable_styling(latex_options = "HOLD_position", position = "center") %>%
+  row_spec(row = 0, color = "black", background = "lightgray") %>%
+  column_spec(ncol(game_summary_table), border_right = TRUE) 
+# data objects d1 and d2 are from the previous code chunk
+```
+\vspace{-8mm} 
+
+\begin{center}
+\begin{minipage}[t]{0.4\textwidth}
+\centering
+\textbf{\normalsize Pitch Usage VS RHB}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\textbf{\normalsize Pitch Usage vs LHB}
+\end{minipage}
+\end{center}
+\vspace{-6mm} 
+
+```{r pitch usage , echo=FALSE, warning=FALSE}
+knitr::kables(
+  list(
+    # the first kable() to change column names
+    knitr::kable(
+      usage_r, valign = 't', label = 'Pitch Usage VS RHB'
+      ) %>%
+      row_spec(row = 0, color = "black", background = "lightgray")%>%
+      column_spec(ncol(usage_r), border_right = TRUE),
+    
+    # the second kable() to set the digits option
+    knitr::kable(usage_l,  valign = 't', label = 'Pitcher Usage vs LHB') %>%
+      row_spec(row = 0, color = "black", background = "lightgray") %>%
+      column_spec(ncol(usage_l), border_right = TRUE)
+  ), format = "latex" )    %>%
+  kable_styling(latex_options = "HOLD_position")
+
+
+
+# knitr::kable(game_stats,  valign = 't', label = 'Game Stats') %>%
+#       column_spec(1, bold = TRUE, border_left = TRUE) %>%
+#       row_spec(row = 0, color = "black", background = "#CC0000") %>%
+#       column_spec(ncol(game_stats), border_right = TRUE)
+#   ), format = "latex" )
+```
+\vspace{-5mm} 
+```{r vb/hb plot and velo plot, echo=FALSE, warning=FALSE, fig.width=3,fig.height=3} 
+pitch_movement_plot
+pvp_game_plot
+```
+\vspace{-5mm} 
+\begin{center}
+\textbf{\normalsize Situational Pitch Breakdown}
+\end{center}
+\vspace{-5mm} 
+
+```{r situational breakdown, echo = F, warning = F, position='center', fig.height=3, fig.width=8}
+breakdown
+```
+
+\newpage
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+\begin{center}
+\textbf{\LARGE VS RHB}
+\end{center}
+
+```{r pitch vs R,echo=FALSE,warning=FALSE, position='center',fig.height=4, fig.width=8.5  }
+
+if(nrow(usage_r)>0){
+  plp_rhh} else {"No data vs RHB available"}
+
+```
+\begin{center}
+\textbf{\normalsize Usage per Count vs RHB}
+\end{center}
+\vspace{-5mm} 
+```{r count vs R ,warning=FALSE,echo=FALSE }
+
+# we again scale the colors manually to match the plots
+CountR %>%
+  kable(format = "latex",  linesep = "", label = "Count VS RHH") %>%
+  kable_styling(latex_options = "HOLD_position", position = "center") %>%
+  row_spec(row = 0, color = "black", background = "lightgray") %>%
+  column_spec(ncol(CountR), border_right = TRUE) 
+# data objects d1 and d2 are from the previous code chunk
+```
+
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+\textbf{\normalsize `r params$pitcher`}
+
+\newpage
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+\begin{center}
+\textbf{\LARGE VS LHB}
+\end{center}
+```{r pitch vs L,echo=FALSE,warning=FALSE, position='center',fig.height=4, fig.width=8.5 }
+
+if(nrow(usage_l)>0){
+  plp_lhh} else {"No data vs LHB available"}
+
+```
+
+\begin{center}
+\textbf{\normalsize Usage per Count vs LHB}
+\end{center}
+\vspace{-5mm} 
+```{r count vs L ,warning=FALSE,echo=FALSE}
+
+# we again scale the colors manually to match the plots
+CountL %>%
+  kable(format = "latex",  linesep = "", label = "Count VS LHH") %>%
+  kable_styling(latex_options = "HOLD_position", position = "center") %>%
+  row_spec(row = 0, color = "black", background = "lightgray") %>%
+  column_spec(ncol(CountL), border_right = TRUE) 
+# data objects d1 and d2 are from the previous code chunk
+```
+
+ \linebreak
+ \linebreak
+ \linebreak
+ \linebreak
+\textbf{\normalsize `r params$pitcher`}
+
+
+
