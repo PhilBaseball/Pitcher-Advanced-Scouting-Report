@@ -1,0 +1,1 @@
+These files use Yakkertech data (Very close to TrackMan) to create individuals advanced scouting reports for opposing pitchers. We use them to help hitters with their gameplan. The R file is linked to the Rmd file to create the pdf version. 
